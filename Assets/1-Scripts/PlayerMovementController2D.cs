@@ -11,11 +11,13 @@ public class PlayerMovementController2D : MonoBehaviour
     private float inputX;
     private float inputY;
     private Vector2 movementDir;
+    private PlayerAnimationController animationControllerRef;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
+        animationControllerRef = gameObject.GetComponent<PlayerAnimationController>();
     }
 
     // Update is called once per frame
@@ -30,6 +32,14 @@ public class PlayerMovementController2D : MonoBehaviour
     private void FixedUpdate()
     {
         rb.velocity = movementDir * speed;
+        if(rb.velocity.magnitude > 0)
+        {
+            animationControllerRef.SetRunning(true);
+        }
+        else
+        {
+            animationControllerRef.SetRunning(false);
+        }
     }
 
 }
