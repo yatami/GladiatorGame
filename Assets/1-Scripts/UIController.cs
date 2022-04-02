@@ -6,15 +6,22 @@ public class UIController : MonoBehaviour
 {
     public Text GoldText;
     public Text TimerText;
-    public GameController gameController;
     public GameObject HomeScreenUI;
     public GameObject InGameUI;
+    public static UIController Instance;
 
-    private int Gold = 5;
+    private int Gold = 0;
     private float StartGameTime;
+    
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     public void GameStart()
     {
-        gameController.SetStage(Stage.Play);
+        GameController.Instance.SetStage(Stage.Play);
         StartGameTime = Time.time;
         HomeScreenUI.SetActive(false);
         InGameUI.SetActive(true);
@@ -31,9 +38,14 @@ public class UIController : MonoBehaviour
     private void Update()
     {
         GoldText.text = "$ " + Gold + "";
-        if (gameController.GetStage() == Stage.Play)
+        if (GameController.Instance.GetStage() == Stage.Play)
         {
-            TimerText.text = Mathf.Round((Time.time - StartGameTime)*100)/100  + "";
+            float x = Mathf.Round((Time.time - StartGameTime) * 100);
+            if ( x % 3f == 0)
+            {
+                TimerText.text = x / 100 + "";
+            }
+            
         }
         
     }
