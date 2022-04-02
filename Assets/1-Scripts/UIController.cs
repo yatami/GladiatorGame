@@ -4,14 +4,20 @@ using UnityEngine;
 using UnityEngine.UI;
 public class UIController : MonoBehaviour
 {
-    public Text Text;
-    //Game Controller çek
-    private int Gold = 5;
+    public Text GoldText;
+    public Text TimerText;
     public GameController gameController;
+    public GameObject HomeScreenUI;
+    public GameObject InGameUI;
+
+    private int Gold = 5;
+    private float StartGameTime;
     public void GameStart()
     {
-        //Oyunu baþlat
-        gameController.SetStagePlay();
+        gameController.SetStage(Stage.Play);
+        StartGameTime = Time.time;
+        HomeScreenUI.SetActive(false);
+        InGameUI.SetActive(true);
     }
     public void GameQuit() 
     {
@@ -24,7 +30,12 @@ public class UIController : MonoBehaviour
 
     private void Update()
     {
-        Text.text = "$ " + Gold + "";
+        GoldText.text = "$ " + Gold + "";
+        if (gameController.GetStage() == Stage.Play)
+        {
+            TimerText.text = Mathf.Round((Time.time - StartGameTime)*100)/100  + "";
+        }
+        
     }
 
     public void AddGold(int otherGold)

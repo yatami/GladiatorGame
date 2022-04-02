@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    enum Stage
-    {
-        UI,
-        Play,
-        Reset
-    }
+
+
     List<GameObject> Enemys;
     Stage stage;
-    private float spawnRate;
+    private float spawnRateMin;
+    private float spawnRateMax;
+    public UIController UIController;
+
     private void Start()
     {
         stage = Stage.UI;
         Enemys = new List<GameObject>();
-        spawnRate = 2;
+        spawnRateMin = 2;
+        spawnRateMax = 4;
         StartCoroutine(SpawnEnemy());
     }
 
@@ -27,17 +27,34 @@ public class GameController : MonoBehaviour
         {
             if (stage == Stage.Play)
             {
+                yield return new WaitForSeconds(Random.Range(spawnRateMin, spawnRateMax));
                 Debug.Log("EnemySpawn");
-                //spawn object
-                yield return new WaitForSeconds(spawnRate);
             }
             yield return null;
         }
     }
 
-    public void SetStagePlay()
+    private void Update()
     {
-        stage = Stage.Play;
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            GameReset();
+        }
     }
 
+    private void GameReset()
+    {
+        stage = Stage.UI;
+        UIController.HomeScreenUI.SetActive(true);
+        UIController.InGameUI.SetActive(false);
+    }
+
+    public void SetStage(Stage stage)
+    {
+        this.stage = stage;
+    }
+    public Stage GetStage()
+    {
+        return stage;
+    }
 }
