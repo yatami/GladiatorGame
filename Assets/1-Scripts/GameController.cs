@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -9,7 +10,9 @@ public class GameController : MonoBehaviour
 
     List<GameObject> Enemys;
     Stage stage;
+    [SerializeField]
     private float spawnRateMin;
+    [SerializeField]
     private float spawnRateMax;
 
     [System.Serializable] public class StartGameEvent : UnityEvent { }
@@ -120,5 +123,9 @@ public class GameController : MonoBehaviour
     {
         if (startGameEvent != null)
             resumeGameEvent.Invoke();
+    }
+    public void MainMenuButton()
+    {
+        SceneManager.LoadScene("Utku");
     }
 }
