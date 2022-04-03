@@ -32,7 +32,7 @@ public class EnemyAnimationController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        PlayDeathAnim();
     }
 
     // Update is called once per frame
@@ -131,6 +131,12 @@ public class EnemyAnimationController : MonoBehaviour
     public void PlayBackAttack()
     {
         weaponAnimator.SetTrigger("PlayBackAttack");
+    }
+
+    public void PlayDeathAnim()
+    {
+        bodyAnimator.Play("EnemyDeath", 0);
+        weaponAnimator.Play("EnemySwordDeath", 0);
     }
 
 

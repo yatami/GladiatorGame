@@ -24,11 +24,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6899983916618056116}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.36, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0.15717995, w: 0.98757}
+  m_LocalPosition: {x: 0.43277356, y: -0.07927253, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 6899983917197622493}
+  m_Father: {fileID: 6899983918603052077}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6899983916618056114
@@ -554,7 +554,6 @@ Transform:
   m_Children:
   - {fileID: 6899983917140157847}
   - {fileID: 6899983917932210389}
-  - {fileID: 6899983916618056115}
   - {fileID: 6899983918603052077}
   m_Father: {fileID: 6899983918313157562}
   m_RootOrder: 1
@@ -848,6 +847,7 @@ GameObject:
   - component: {fileID: 6899983918313157562}
   - component: {fileID: 6899983918313157561}
   - component: {fileID: 6899983918313157560}
+  - component: {fileID: 5072892019637800712}
   m_Layer: 0
   m_Name: EnemyMain
   m_TagString: Untagged
@@ -918,6 +918,22 @@ MonoBehaviour:
   drawnHandLeft: {fileID: 6899983916670112096}
   drawnArrow: {fileID: 6899983918090800733}
   drawnBow: {fileID: 6899983918090800733}
+--- !u!111 &5072892019637800712
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6899983918313157563}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: edcbcd03c25448545a44b839ee091e79, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &6899983918603052078
 GameObject:
   m_ObjectHideFlags: 0
@@ -948,8 +964,9 @@ Transform:
   m_Children:
   - {fileID: 6899983916670112111}
   - {fileID: 6899983918090800732}
+  - {fileID: 6899983916618056115}
   m_Father: {fileID: 6899983917197622493}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 18.086}
 --- !u!95 &6899983918603052076
 Animator:
