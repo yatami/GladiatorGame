@@ -11,6 +11,8 @@ public class PlayerAnimationController : MonoBehaviour
     public GameObject chestBack;
     public GameObject headFront;
     public GameObject headBack;
+    public GameObject helmetFront;
+    public GameObject helmetBack;
     public GameObject handRight;
     public GameObject handLeft;
     public GameObject arrow;
@@ -53,6 +55,8 @@ public class PlayerAnimationController : MonoBehaviour
             chestBack.transform.rotation = Quaternion.Euler(chestFront.transform.rotation.eulerAngles.x, 180, chestFront.transform.rotation.eulerAngles.x);
             headFront.transform.rotation = Quaternion.Euler(chestFront.transform.rotation.eulerAngles.x, 180, chestFront.transform.rotation.eulerAngles.x);
             headBack.transform.rotation = Quaternion.Euler(chestFront.transform.rotation.eulerAngles.x, 0, chestFront.transform.rotation.eulerAngles.z);
+            helmetFront.transform.rotation = Quaternion.Euler(chestFront.transform.rotation.eulerAngles.x, 180, chestFront.transform.rotation.eulerAngles.z);
+            helmetBack.transform.rotation = Quaternion.Euler(chestFront.transform.rotation.eulerAngles.x, 180, chestFront.transform.rotation.eulerAngles.z);
 
         }
         else
@@ -61,6 +65,8 @@ public class PlayerAnimationController : MonoBehaviour
             chestBack.transform.rotation = Quaternion.Euler(chestFront.transform.rotation.eulerAngles.x, 0, chestFront.transform.rotation.eulerAngles.x);
             headFront.transform.rotation = Quaternion.Euler(chestFront.transform.rotation.eulerAngles.x, 0, chestFront.transform.rotation.eulerAngles.x);
             headBack.transform.rotation = Quaternion.Euler(chestFront.transform.rotation.eulerAngles.x, 180, chestFront.transform.rotation.eulerAngles.z);
+            helmetFront.transform.rotation = Quaternion.Euler(chestFront.transform.rotation.eulerAngles.x, 0, chestFront.transform.rotation.eulerAngles.z);
+            helmetBack.transform.rotation = Quaternion.Euler(chestFront.transform.rotation.eulerAngles.x, 0, chestFront.transform.rotation.eulerAngles.z);
         }
     }
 

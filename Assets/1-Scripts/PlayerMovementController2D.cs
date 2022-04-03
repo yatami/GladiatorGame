@@ -5,17 +5,25 @@ using UnityEngine;
 public class PlayerMovementController2D : MonoBehaviour
 {
     public float speed;
+    public float dashSpeed;
+    public float dashTime;
+    public float dashCooldown;
+    public ParticleSystem dashParticle;
 
     private Rigidbody2D rb;
 
     private float inputX;
     private float inputY;
     private Vector2 movementDir;
+    private Vector2 dashDir;
     private PlayerAnimationController animationControllerRef;
+    private float dashCooldownTimer;
+    private bool isDashing;
 
     // Start is called before the first frame update
     void Start()
     {
+        dashCooldownTimer = 0;
         rb = gameObject.GetComponent<Rigidbody2D>();
         animationControllerRef = gameObject.GetComponent<PlayerAnimationController>();
     }
@@ -27,19 +35,48 @@ public class PlayerMovementController2D : MonoBehaviour
         inputY = Input.GetAxis("Vertical");
         movementDir = new Vector2(inputX, inputY).normalized;
 
+        if(Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            if(dashCooldownTimer > dashCooldown)
+            {
+                dashCooldownTimer = 0;
+                dashDir = movementDir;
+                isDashing = true;
+                StartCoroutine(StopDashingCor());
+                dashParticle.Play();
+            }
+           
+        }
+
+        dashCooldownTimer += Time.deltaTime;
     }
 
     private void FixedUpdate()
     {
-        rb.velocity = movementDir * speed;
-        if(rb.velocity.magnitude > 0)
+        if(isDashing == false)
         {
-            animationControllerRef.SetRunning(true);
+            rb.velocity = movementDir * speed;
+            if (rb.velocity.magnitude > 0)
+            {
+                animationControllerRef.SetRunning(true);
+            }
+            else
+            {
+                animationControllerRef.SetRunning(false);
+            }
         }
         else
         {
-            animationControllerRef.SetRunning(false);
+            rb.velocity = dashDir * dashSpeed;
         }
+    }
+
+    IEnumerator StopDashingCor()
+    {
+        yield return new WaitForSeconds(dashTime);
+        dashParticle.Stop();
+        isDashing = false;
+        yield break;
     }
 
 }

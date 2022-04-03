@@ -17,6 +17,6 @@ public class PlayerFollower : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gameObject.transform.position = (playerRef.transform.position - startPos)/5;
+        gameObject.transform.position = startPos + (playerRef.transform.position - startPos)/5;
     }
 }
