@@ -136,5 +136,6 @@ public class GameController : MonoBehaviour
     public void MainMenuButton()
     {
         SceneManager.LoadScene("Utku");
+        
     }
 }

@@ -90,7 +90,7 @@ public class PlayerAimAndFire : MonoBehaviour
         // Release effects
         cameraShake();
 
-        yield break;
+        yield return null;
     }
 
     private void cameraShake()
