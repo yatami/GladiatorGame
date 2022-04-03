@@ -6,30 +6,39 @@ public class ArrowController : MonoBehaviour
 {
     Rigidbody2D rb;
 
+    private Vector3 direction;
+    private float speed;
+
     private void Awake()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-
     public void SetDirection(Vector3 direction, float speed)
     {
         Vector3 positionToAim = gameObject.transform.position + direction * 10f;
-        gameObject.transform.LookAt(positionToAim);
+        transform.up = positionToAim - transform.position;
+
+        this.direction = direction;
+        this.speed = speed;
 
         rb.velocity = direction * speed;
-        Destroy(gameObject, 5f);
+        Destroy(gameObject, 3f);
+    }
+
+    private void FixedUpdate()
+    {
+        rb.velocity = direction * speed;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("collided with " + collision.gameObject.name);
+
+        if (collision.gameObject.CompareTag("Wall"))
+        {
+            speed = 0;
+            AudioController.Instance.PlayArrowHitSound();
+        }
     }
 }
