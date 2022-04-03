@@ -16,6 +16,10 @@ public class GameController : MonoBehaviour
     StartGameEvent startGameEvent = new StartGameEvent();
     [System.Serializable] public class ResetGameEvent : UnityEvent { }
     ResetGameEvent resetGameEvent = new ResetGameEvent();
+    [System.Serializable] public class PauseGameEvent : UnityEvent { }
+    PauseGameEvent pauseGameEvent = new PauseGameEvent();
+    [System.Serializable] public class ResumeGameEvent : UnityEvent { }
+    ResumeGameEvent resumeGameEvent = new ResumeGameEvent();
     private void Awake()
     {
         Instance = this;
@@ -26,9 +30,16 @@ public class GameController : MonoBehaviour
         Enemys = new List<GameObject>();
         spawnRateMin = 2;
         spawnRateMax = 4;
+
         StartCoroutine(SpawnEnemy());
-        startGameEvent.AddListener(StartGame);
-        resetGameEvent.AddListener(ResetGame);
+
+        startGameEvent.AddListener(AIStart);
+        startGameEvent.AddListener(UIController.Instance.GameStart);
+
+        pauseGameEvent.AddListener(AIPause);
+        pauseGameEvent.AddListener(UIGamePause);
+
+        resumeGameEvent.AddListener(ResumeGame);
     }
 
     IEnumerator SpawnEnemy()
@@ -46,10 +57,10 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (startGameEvent != null)
-                resetGameEvent.Invoke();
+                pauseGameEvent.Invoke();
         }
     }
 
@@ -59,7 +70,12 @@ public class GameController : MonoBehaviour
         UIController.Instance.HomeScreenUI.SetActive(true);
         UIController.Instance.InGameUI.SetActive(false);
     }
-
+    private void UIGamePause()
+    {
+        stage = Stage.UI;
+        UIController.Instance.PauseScreenUI.SetActive(true);
+        UIController.Instance.InGameUI.SetActive(true);
+    }
     public void SetStage(Stage stage)
     {
         this.stage = stage;
@@ -70,19 +86,39 @@ public class GameController : MonoBehaviour
         return stage;
     }
 
-    private void StartGame()
+    private void AIStart()
     {
-        UIController.Instance.GameStart();
+        var Enemys = GameObject.FindGameObjectsWithTag("Enemy");
+        for (int i = 0; i < Enemys.Length; i++)
+        {
+            Enemys[i].GetComponent<Enemy>().EnemyAI(true);
+        }
     }
 
-    private void ResetGame()
+    private void AIPause()
     {
-        GameReset();
+        var Enemys = GameObject.FindGameObjectsWithTag("Enemy");
+        for (int i = 0; i < Enemys.Length; i++)
+        {
+            Enemys[i].GetComponent<Enemy>().EnemyAI(false);
+        }
     }
 
     public void StartGameButton()
     {
         if (startGameEvent != null)
             startGameEvent.Invoke();
+    }
+
+    private void ResumeGame()
+    {
+        stage = Stage.Play;
+        UIController.Instance.PauseScreenUI.SetActive(false);
+        AIStart();
+    }
+    public void ResumeGameButon()
+    {
+        if (startGameEvent != null)
+            resumeGameEvent.Invoke();
     }
 }

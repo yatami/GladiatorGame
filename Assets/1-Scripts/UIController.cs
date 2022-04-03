@@ -5,15 +5,16 @@ using UnityEngine.UI;
 public class UIController : MonoBehaviour
 {
     public Text GoldText;
-    public Text TimerText;
+    public Text PlayTimerText;
+    public Text PauseTimerText;
     public GameObject HomeScreenUI;
     public GameObject InGameUI;
+    public GameObject PauseScreenUI;
     public static UIController Instance;
 
     private int Gold = 0;
-    private float StartGameTime;
-    
-
+    private float UIGameTime;
+    private float InGameTime;
     private void Awake()
     {
         Instance = this;
@@ -22,7 +23,6 @@ public class UIController : MonoBehaviour
     public void GameStart()
     {
         GameController.Instance.SetStage(Stage.Play);
-        StartGameTime = Time.time;
         HomeScreenUI.SetActive(false);
         InGameUI.SetActive(true);
     }
@@ -40,14 +40,16 @@ public class UIController : MonoBehaviour
         GoldText.text = "$ " + Gold + "";
         if (GameController.Instance.GetStage() == Stage.Play)
         {
-            float x = Mathf.Round((Time.time - StartGameTime) * 100);
-            if ( x % 3f == 0)
+            InGameTime = Mathf.Round((Time.time - UIGameTime) * 100);
+            if (InGameTime % 3f == 0)
             {
-                TimerText.text = x / 100 + "";
+                PlayTimerText.text = InGameTime / 100 + "";
             }
-            
         }
-        
+        else
+        {
+            UIGameTime += Time.deltaTime;
+        }
     }
 
     public void AddGold(int otherGold)
