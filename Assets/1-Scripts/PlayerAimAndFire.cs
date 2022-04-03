@@ -35,7 +35,7 @@ public class PlayerAimAndFire : MonoBehaviour
         Vector3 mousePositionWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3 direction = mousePositionWorld - bowRoot.transform.position;
         direction = new Vector3(direction.x, direction.y,0).normalized;
-        Debug.Log(direction);
+        //Debug.Log(direction);
 
         bowRoot.transform.LookAt(new Vector3(mousePositionWorld.x, mousePositionWorld.y, 0));
 
@@ -90,7 +90,7 @@ public class PlayerAimAndFire : MonoBehaviour
         // Release effects
         cameraShake();
 
-        yield break;
+        yield return null;
     }
 
     private void cameraShake()
