@@ -6,24 +6,29 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
     public Transform Target;
+    public int Health;
+    public float Speed;
 
-    private int Health;
-    private float Speed;
+
+
     private NavMeshAgent navMeshAgent;
+    [SerializeField]
     private bool AIStart;
+
+
 
     private void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.updateRotation = false;
         navMeshAgent.updateUpAxis = false;
-        AIStart = false;
     }
 
     private void Update()
     {
         if (AIStart)
         {
+            navMeshAgent.speed = Speed;
             navMeshAgent.isStopped = false;
             navMeshAgent.SetDestination(Target.position);
         }
@@ -33,9 +38,13 @@ public class Enemy : MonoBehaviour
         }
         
     }
-    public void DestroyEnemy()
+    public void ShotEnemy()
     {
-        Destroy(this.gameObject);
+        --Health;
+        if (Health == 0)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     public void EnemyAI(bool AI)

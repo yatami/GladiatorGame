@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 public class UIController : MonoBehaviour
 {
-    public Text GoldText;
-    public Text PlayTimerText;
-    public Text PauseTimerText;
+    public TextMeshProUGUI GoldText;
+    public TextMeshProUGUI TimerText;
     public GameObject HomeScreenUI;
     public GameObject InGameUI;
     public GameObject PauseScreenUI;
@@ -43,7 +43,7 @@ public class UIController : MonoBehaviour
             InGameTime = Mathf.Round((Time.time - UIGameTime) * 100);
             if (InGameTime % 3f == 0)
             {
-                PlayTimerText.text = InGameTime / 100 + "";
+                TimerText.text = InGameTime / 100 + "";
             }
         }
         else

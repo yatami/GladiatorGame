@@ -40,5 +40,11 @@ public class ArrowController : MonoBehaviour
             speed = 0;
             AudioController.Instance.PlayArrowHitSound();
         }
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            //Buraya animasyon eklenir
+            Destroy(this.gameObject);
+            collision.gameObject.GetComponent<Enemy>().ShotEnemy();
+        }
     }
 }

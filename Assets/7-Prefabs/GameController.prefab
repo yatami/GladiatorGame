@@ -43,5 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64543440277f3964bae06491a7fda241, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnRateMin: 2
-  spawnRateMax: 4
+  EnemyPrefab: {fileID: 5609221496669100895, guid: 4c3f121f2f58b5d448796fc8cb1ac40a, type: 3}
+  spawnRateMin: 0.7
+  spawnRateMax: 1.5
+  ArenaVerticalDis: 17.5
+  ArenaHortizonalDis: 6

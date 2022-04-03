@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour
 {
     public static GameController Instance;
+    public List<Enemy> EnemyArray;
 
     List<GameObject> Enemys;
     Stage stage;
@@ -14,6 +15,11 @@ public class GameController : MonoBehaviour
     private float spawnRateMin;
     [SerializeField]
     private float spawnRateMax;
+
+    [SerializeField]
+    private float ArenaVerticalDis;
+    [SerializeField]
+    private float ArenaHortizonalDis;
 
     [System.Serializable] public class StartGameEvent : UnityEvent { }
     StartGameEvent startGameEvent = new StartGameEvent();
@@ -31,8 +37,6 @@ public class GameController : MonoBehaviour
     {
         stage = Stage.UI;
         Enemys = new List<GameObject>();
-        spawnRateMin = 2;
-        spawnRateMax = 4;
 
         StartCoroutine(SpawnEnemy());
 
@@ -52,7 +56,12 @@ public class GameController : MonoBehaviour
             if (stage == Stage.Play)
             {
                 yield return new WaitForSeconds(Random.Range(spawnRateMin, spawnRateMax));
+#if UNITY_EDITOR
                 Debug.Log("EnemySpawn");
+#endif
+                var EnemyTmp = Instantiate(EnemyArray[Random.Range(0,EnemyArray.Count)],new Vector3(Random.Range(ArenaVerticalDis*-1,ArenaVerticalDis),Random.Range(ArenaHortizonalDis*-1,ArenaHortizonalDis),0),Quaternion.identity);
+                EnemyTmp.GetComponent<Enemy>().Target= GameObject.FindGameObjectWithTag("Player").transform;
+                EnemyTmp.GetComponent<Enemy>().EnemyAI(true);
             }
             yield return new WaitForSeconds(0.01f);
         }
@@ -62,7 +71,7 @@ public class GameController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (startGameEvent != null)
+            if (pauseGameEvent != null)
                 pauseGameEvent.Invoke();
         }
     }
@@ -121,7 +130,7 @@ public class GameController : MonoBehaviour
     }
     public void ResumeGameButon()
     {
-        if (startGameEvent != null)
+        if (resumeGameEvent != null)
             resumeGameEvent.Invoke();
     }
     public void MainMenuButton()
