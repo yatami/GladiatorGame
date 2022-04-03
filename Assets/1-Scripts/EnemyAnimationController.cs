@@ -138,6 +138,4 @@ public class EnemyAnimationController : MonoBehaviour
         bodyAnimator.Play("EnemyDeath", 0);
         weaponAnimator.Play("EnemySwordDeath", 0);
     }
-
-
 }
