@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerAnimationController : MonoBehaviour
 {
+    public float releaseAnimationTime;
+
     public Animator bodyAnimator;
     public GameObject chestFront;
     public GameObject chestBack;
@@ -13,6 +15,12 @@ public class PlayerAnimationController : MonoBehaviour
     public GameObject handLeft;
     public GameObject arrow;
     public GameObject bow;
+
+    public GameObject drawnHandRight;
+    public GameObject drawnHandLeft;
+    public GameObject drawnArrow;
+    public GameObject drawnBow;
+
 
     public static PlayerAnimationController Instance;
     private void Awake()
@@ -65,10 +73,15 @@ public class PlayerAnimationController : MonoBehaviour
             headFront.SetActive(true);
             headBack.SetActive(false);
 
-            handRight.GetComponent<SpriteRenderer>().sortingOrder = 10;
-            handLeft.GetComponent<SpriteRenderer>().sortingOrder = 10;
-            arrow.GetComponent<SpriteRenderer>().sortingOrder = 10;
+            handRight.GetComponent<SpriteRenderer>().sortingOrder = 11;
+            handLeft.GetComponent<SpriteRenderer>().sortingOrder = 11;
+            arrow.GetComponent<SpriteRenderer>().sortingOrder = 9;
             bow.GetComponent<SpriteRenderer>().sortingOrder = 10;
+
+            drawnHandRight.GetComponent<SpriteRenderer>().sortingOrder = 11;
+            drawnHandLeft.GetComponent<SpriteRenderer>().sortingOrder = 11;
+            drawnArrow.GetComponent<SpriteRenderer>().sortingOrder = 9;
+            drawnBow.GetComponent<SpriteRenderer>().sortingOrder = 10;
         }
         else
         {
@@ -81,7 +94,36 @@ public class PlayerAnimationController : MonoBehaviour
             handLeft.GetComponent<SpriteRenderer>().sortingOrder = -10;
             arrow.GetComponent<SpriteRenderer>().sortingOrder = -10;
             bow.GetComponent<SpriteRenderer>().sortingOrder = -10;
+
+            drawnHandRight.GetComponent<SpriteRenderer>().sortingOrder = -10;
+            drawnHandLeft.GetComponent<SpriteRenderer>().sortingOrder = -10;
+            drawnArrow.GetComponent<SpriteRenderer>().sortingOrder = -10;
+            drawnBow.GetComponent<SpriteRenderer>().sortingOrder = -10;
         }
     }
+
+    public float PlayReleaseAnimation()
+    {
+        StartCoroutine(ReleaseAnimationCor());
+        return releaseAnimationTime;
+    }
+
+    IEnumerator ReleaseAnimationCor()
+    {
+        bow.SetActive(false);
+        drawnBow.SetActive(true);
+        yield return new WaitForSeconds(releaseAnimationTime);
+        bow.SetActive(true);
+        drawnBow.SetActive(false);
+        arrow.SetActive(false);
+        yield break;
+    }
+
+    public void MakeArrowVisible()
+    {
+        arrow.SetActive(true);
+    }
+
+
 
 }

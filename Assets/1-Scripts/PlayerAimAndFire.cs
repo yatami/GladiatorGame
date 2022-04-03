@@ -1,9 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
+using Cinemachine;
 
 public class PlayerAimAndFire : MonoBehaviour
 {
+    public CinemachineVirtualCamera cinemachineRef;
+
+    public float orthographicStartSize;
+    public float orthographicEndSize;
+    public float camShakeDuration;
+
     public float arrowSpeed;
     public float arrowCooldown;
 
@@ -41,7 +49,12 @@ public class PlayerAimAndFire : MonoBehaviour
             }
         }
 
-        if(direction.x > 0)
+        if (cooldownTimer > arrowCooldown)
+        {
+            PlayerAnimationController.Instance.MakeArrowVisible();
+        }
+
+        if (direction.x > 0)
         {
             animationControllerRef.ChangeSides(true);
         }
@@ -63,8 +76,29 @@ public class PlayerAimAndFire : MonoBehaviour
 
     private void ReleaseArrow(Vector3 direction)
     {
+        StartCoroutine(ReleaseArrowCor(direction));
+       
+        
+    }
 
+    IEnumerator ReleaseArrowCor(Vector3 direction)
+    {
+        float animTime = PlayerAnimationController.Instance.PlayReleaseAnimation();
+        yield return new WaitForSeconds(animTime);
         GameObject newArrow = Instantiate(arrow, arrowReleaseCenter.transform.position, Quaternion.identity);
         newArrow.GetComponent<ArrowController>().SetDirection(direction, arrowSpeed);
+        // Release effects
+        cameraShake();
+
+        yield break;
+    }
+
+    private void cameraShake()
+    {
+        DOTween.To(() => cinemachineRef.m_Lens.OrthographicSize, x => cinemachineRef.m_Lens.OrthographicSize = x, orthographicStartSize, camShakeDuration/3).OnComplete((
+                () =>
+                {
+                    DOTween.To(() => cinemachineRef.m_Lens.OrthographicSize, x => cinemachineRef.m_Lens.OrthographicSize = x, orthographicEndSize, camShakeDuration*2/3);
+                }));
     }
 }

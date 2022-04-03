@@ -38,6 +38,7 @@ public class ArrowController : MonoBehaviour
         if (collision.gameObject.CompareTag("Wall"))
         {
             speed = 0;
+            AudioController.Instance.PlayArrowHitSound();
         }
     }
 }
