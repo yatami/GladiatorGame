@@ -14,10 +14,12 @@ public class Enemy : MonoBehaviour
     private float I_DotUp;
     private float I_DotRight;
     private NavMeshAgent navMeshAgent;
+    private bool FrontBack;
     [SerializeField]
     private bool AIStart;
-
-
+    private bool Death;
+    [SerializeField]
+    private float HittingDistance = 1.75f;
 
     private void Start()
     {
@@ -25,6 +27,7 @@ public class Enemy : MonoBehaviour
         navMeshAgent.updateRotation = false;
         navMeshAgent.updateUpAxis = false;
         animationController = GetComponent<EnemyAnimationController>();
+        animationController.SetRunning(true);
     }
 
     private void Update()
@@ -39,14 +42,23 @@ public class Enemy : MonoBehaviour
         {
             navMeshAgent.isStopped = true;
         }
-        DirEnemy();
+        if (!Death)
+        {
+            DirEnemy();
+            FindDistanceandAttack();
+        }
+        
     }
     public void ShotEnemy()
     {
         --Health;
         if (Health == 0)
         {
-            Destroy(this.gameObject);
+            Death = true;
+            animationController.PlayDeathAnim();
+            Speed = 0;
+            GetComponent<BoxCollider2D>().enabled = false;
+            Destroy(this.gameObject,1f);
         }
     }
 
@@ -61,10 +73,12 @@ public class Enemy : MonoBehaviour
         I_DotUp = Vector3.Dot(Vector3.up,I_EnemytoTarget);
         if (I_DotUp > 0)
         {
+            FrontBack = false;
             animationController.ChangeFrontBack(false);
         }
         else
         {
+            FrontBack = true;
             animationController.ChangeFrontBack(true);
         }
         I_DotRight = Vector3.Dot(Vector3.right, I_EnemytoTarget);
@@ -77,17 +91,24 @@ public class Enemy : MonoBehaviour
             animationController.ChangeSides(false);
         }
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void FindDistanceandAttack()
     {
-        Debug.Log("Trigger");
-        if (collision.gameObject.CompareTag("Player"))
+        if (Death) return;
+        if (Vector3.Distance(transform.position,Target.transform.position) < HittingDistance)
         {
-            
+            Attack();
         }
-        Attack();
+        
     }
     public void Attack()
     {
-        animationController.PlayFrontAttack();
+        if (FrontBack)
+        {
+            animationController.PlayBackAttack();
+        }
+        else
+        {
+            animationController.PlayFrontAttack();
+        }
     }
 }

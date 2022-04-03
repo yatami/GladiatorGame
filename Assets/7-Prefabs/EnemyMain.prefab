@@ -942,7 +942,7 @@ NavMeshAgent:
   m_Height: 2
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 1
 --- !u!114 &339309602539580019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -957,7 +957,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
   Health: 1
-  Speed: 0
+  Speed: 6
   AIStart: 0
 --- !u!61 &3869523673429308755
 BoxCollider2D:

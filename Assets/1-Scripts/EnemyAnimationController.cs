@@ -126,11 +126,11 @@ public class EnemyAnimationController : MonoBehaviour
 
     public void PlayFrontAttack()
     {
-        weaponAnimator.SetTrigger("PlayFrontAttack");
+        weaponAnimator.Play("EnemySwordAttackBack", 0);
     }
     public void PlayBackAttack()
     {
-        weaponAnimator.SetTrigger("PlayBackAttack");
+        weaponAnimator.Play("EnemySwordAttack", 0);
     }
 
     public void PlayDeathAnim()
