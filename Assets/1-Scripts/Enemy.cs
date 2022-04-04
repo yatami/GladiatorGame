@@ -1,10 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using DG.Tweening;
 
 public class Enemy : MonoBehaviour
 {
+    public ParticleSystem bloodParticle;
     public Transform Target;
     public int Health;
     public float Speed;
@@ -20,6 +23,9 @@ public class Enemy : MonoBehaviour
     private bool Death;
     [SerializeField]
     private float HittingDistance = 1.75f;
+    private BoxCollider2D boxColliderRef;
+    private bool gameOver;
+
 
     private void Start()
     {
@@ -28,6 +34,13 @@ public class Enemy : MonoBehaviour
         navMeshAgent.updateUpAxis = false;
         animationController = GetComponent<EnemyAnimationController>();
         animationController.SetRunning(true);
+        boxColliderRef = gameObject.GetComponent<BoxCollider2D>();
+        GameController.Instance.gameOverEvent.AddListener(GameOver);
+    }
+
+    private void GameOver()
+    {
+        gameOver = true;
     }
 
     private void Update()
@@ -49,17 +62,45 @@ public class Enemy : MonoBehaviour
         }
         
     }
-    public void ShotEnemy()
+    public void ShotEnemy(Vector3 contactPos)
     {
         --Health;
         if (Health == 0)
         {
+            PlayBloodParticle(contactPos);
+            FlyCharacterInTheDirection(contactPos);
+
+            AIStart = false;
             Death = true;
             animationController.PlayDeathAnim();
-            Speed = 0;
+            navMeshAgent.velocity = Vector3.zero;
+            navMeshAgent.Stop();
+            navMeshAgent.isStopped = true;
+            navMeshAgent.enabled = false;
             GetComponent<BoxCollider2D>().enabled = false;
-            Destroy(this.gameObject,1f);
+            boxColliderRef.isTrigger = true;
+            Destroy(this.gameObject,1.5f);
         }
+    }
+
+    public void PlayBloodParticle(Vector3 pos)
+    {
+        Vector3 dir = (gameObject.transform.position - pos).normalized;
+
+
+        bloodParticle.gameObject.transform.position = pos + dir;
+        bloodParticle.gameObject.transform.LookAt(Target);
+
+        bloodParticle.Play();
+    }
+
+    public void FlyCharacterInTheDirection(Vector3 pos)
+    {
+        Vector3 dir = (gameObject.transform.position - pos).normalized;
+
+        Vector3 targetPos = gameObject.transform.position + dir * 3;
+
+        gameObject.transform.DOMove(targetPos, 0.5f).SetEase(Ease.OutCubic);
     }
 
     public void EnemyAI(bool AI)
@@ -94,7 +135,7 @@ public class Enemy : MonoBehaviour
     private void FindDistanceandAttack()
     {
         if (Death) return;
-        if (Vector3.Distance(transform.position,Target.transform.position) < HittingDistance)
+        if (Vector3.Distance(transform.position,Target.transform.position) < HittingDistance && !gameOver)
         {
             Attack();
         }
@@ -111,4 +152,10 @@ public class Enemy : MonoBehaviour
             animationController.PlayFrontAttack();
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        
+    }
+
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,13 +34,18 @@ public class PlayerAnimationController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        GameController.Instance.gameOverEvent.AddListener(GameOver);
+    }
+
+    private void GameOver()
+    {
+        PlayDeathAnimation();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void SetRunning(bool isRunning)
@@ -128,6 +134,11 @@ public class PlayerAnimationController : MonoBehaviour
     public void MakeArrowVisible()
     {
         arrow.SetActive(true);
+    }
+
+    public void PlayDeathAnimation()
+    {
+        bodyAnimator.Play("PlayerCharacterDeath", 0);
     }
 
 

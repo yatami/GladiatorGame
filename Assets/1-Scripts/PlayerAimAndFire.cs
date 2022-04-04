@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Cinemachine;
+using System;
 
 public class PlayerAimAndFire : MonoBehaviour
 {
@@ -21,55 +22,71 @@ public class PlayerAimAndFire : MonoBehaviour
 
     private float cooldownTimer;
     private PlayerAnimationController animationControllerRef;
+    private bool gameStarted;
 
     // Start is called before the first frame update
     void Start()
     {
+        GameController.Instance.startGameEvent.AddListener(GameStart);
+        GameController.Instance.gameOverEvent.AddListener(GameOver);
+
         animationControllerRef = gameObject.GetComponent<PlayerAnimationController>();
         cooldownTimer = 0;
+    }
+
+    private void GameOver()
+    {
+        gameStarted = false;
+    }
+
+    private void GameStart()
+    {
+        gameStarted = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 mousePositionWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3 direction = mousePositionWorld - bowRoot.transform.position;
-        direction = new Vector3(direction.x, direction.y,0).normalized;
-        //Debug.Log(direction);
-
-        bowRoot.transform.LookAt(new Vector3(mousePositionWorld.x, mousePositionWorld.y, 0));
-
-        cooldownTimer += Time.deltaTime;
-        if (Input.GetMouseButtonDown(0))
+        if(gameStarted)
         {
+            Vector3 mousePositionWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 direction = mousePositionWorld - bowRoot.transform.position;
+            direction = new Vector3(direction.x, direction.y, 0).normalized;
+
+            bowRoot.transform.LookAt(new Vector3(mousePositionWorld.x, mousePositionWorld.y, 0));
+
+            cooldownTimer += Time.deltaTime;
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (cooldownTimer > arrowCooldown)
+                {
+                    cooldownTimer = 0;
+                    ReleaseArrow(direction);
+                }
+            }
+
             if (cooldownTimer > arrowCooldown)
             {
-                cooldownTimer = 0;
-                ReleaseArrow(direction);
+                PlayerAnimationController.Instance.MakeArrowVisible();
             }
-        }
 
-        if (cooldownTimer > arrowCooldown)
-        {
-            PlayerAnimationController.Instance.MakeArrowVisible();
-        }
+            if (direction.x > 0)
+            {
+                animationControllerRef.ChangeSides(true);
+            }
+            else
+            {
+                animationControllerRef.ChangeSides(false);
+            }
 
-        if (direction.x > 0)
-        {
-            animationControllerRef.ChangeSides(true);
-        }
-        else
-        {
-            animationControllerRef.ChangeSides(false);
-        }
-
-        if(direction.y > 0)
-        {
-            animationControllerRef.ChangeFrontBack(false);
-        }
-        else
-        {
-            animationControllerRef.ChangeFrontBack(true);
+            if (direction.y > 0)
+            {
+                animationControllerRef.ChangeFrontBack(false);
+            }
+            else
+            {
+                animationControllerRef.ChangeFrontBack(true);
+            }
         }
     }
 

@@ -22,13 +22,15 @@ public class GameController : MonoBehaviour
     private float ArenaHortizonalDis;
 
     [System.Serializable] public class StartGameEvent : UnityEvent { }
-    StartGameEvent startGameEvent = new StartGameEvent();
+    public StartGameEvent startGameEvent = new StartGameEvent();
     [System.Serializable] public class ResetGameEvent : UnityEvent { }
-    ResetGameEvent resetGameEvent = new ResetGameEvent();
+    public ResetGameEvent resetGameEvent = new ResetGameEvent();
     [System.Serializable] public class PauseGameEvent : UnityEvent { }
-    PauseGameEvent pauseGameEvent = new PauseGameEvent();
+    public PauseGameEvent pauseGameEvent = new PauseGameEvent();
     [System.Serializable] public class ResumeGameEvent : UnityEvent { }
-    ResumeGameEvent resumeGameEvent = new ResumeGameEvent();
+    public ResumeGameEvent resumeGameEvent = new ResumeGameEvent();
+    [System.Serializable] public class GameOverEvent : UnityEvent { }
+    public GameOverEvent gameOverEvent = new GameOverEvent();
     private void Awake()
     {
         Instance = this;
@@ -100,6 +102,7 @@ public class GameController : MonoBehaviour
 
     private void AIStart()
     {
+        Time.timeScale = 1f;
         var Enemys = GameObject.FindGameObjectsWithTag("Enemy");
         for (int i = 0; i < Enemys.Length; i++)
         {
@@ -109,6 +112,7 @@ public class GameController : MonoBehaviour
 
     private void AIPause()
     {
+        Time.timeScale = 0.0f;
         var Enemys = GameObject.FindGameObjectsWithTag("Enemy");
         for (int i = 0; i < Enemys.Length; i++)
         {
@@ -127,6 +131,7 @@ public class GameController : MonoBehaviour
         stage = Stage.Play;
         UIController.Instance.PauseScreenUI.SetActive(false);
         AIStart();
+        Time.timeScale = 1f;
     }
     public void ResumeGameButon()
     {

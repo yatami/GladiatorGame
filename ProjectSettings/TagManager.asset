@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Arrow
   - Wall
+  - Enemy
+  - PlayerKiller
   layers:
   - Default
   - TransparentFX

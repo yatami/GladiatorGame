@@ -44,7 +44,7 @@ public class ArrowController : MonoBehaviour
         {
             //Buraya animasyon eklenir
             Destroy(this.gameObject);
-            collision.gameObject.GetComponent<Enemy>().ShotEnemy();
+            collision.gameObject.GetComponent<Enemy>().ShotEnemy(collision.GetContact(0).point);
         }
     }
 }

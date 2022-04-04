@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,36 +20,54 @@ public class PlayerMovementController2D : MonoBehaviour
     private PlayerAnimationController animationControllerRef;
     private float dashCooldownTimer;
     private bool isDashing;
+    private bool gameStarted;
 
     // Start is called before the first frame update
     void Start()
     {
+        GameController.Instance.startGameEvent.AddListener(GameStart);
+        GameController.Instance.gameOverEvent.AddListener(GameOver);
+
         dashCooldownTimer = 0;
         rb = gameObject.GetComponent<Rigidbody2D>();
         animationControllerRef = gameObject.GetComponent<PlayerAnimationController>();
     }
 
+    private void GameOver()
+    {
+        gameStarted = false;
+        speed = 0;
+    }
+
+    private void GameStart()
+    {
+        gameStarted = true;
+    }
+
     // Update is called once per frame
     void Update()
     {
-        inputX = Input.GetAxis("Horizontal");
-        inputY = Input.GetAxis("Vertical");
-        movementDir = new Vector2(inputX, inputY).normalized;
-
-        if(Input.GetKeyDown(KeyCode.LeftShift))
+        if(gameStarted)
         {
-            if(dashCooldownTimer > dashCooldown)
-            {
-                dashCooldownTimer = 0;
-                dashDir = movementDir;
-                isDashing = true;
-                StartCoroutine(StopDashingCor());
-                dashParticle.Play();
-            }
-           
-        }
+            inputX = Input.GetAxis("Horizontal");
+            inputY = Input.GetAxis("Vertical");
+            movementDir = new Vector2(inputX, inputY).normalized;
 
-        dashCooldownTimer += Time.deltaTime;
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                if (dashCooldownTimer > dashCooldown)
+                {
+                    dashCooldownTimer = 0;
+                    dashDir = movementDir;
+                    isDashing = true;
+                    StartCoroutine(StopDashingCor());
+                    dashParticle.Play();
+                }
+
+            }
+
+            dashCooldownTimer += Time.deltaTime;
+        }
     }
 
     private void FixedUpdate()

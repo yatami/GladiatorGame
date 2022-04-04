@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
+
 public class UIController : MonoBehaviour
 {
     public TextMeshProUGUI GoldText;
@@ -23,9 +25,18 @@ public class UIController : MonoBehaviour
     public void GameStart()
     {
         GameController.Instance.SetStage(Stage.Play);
+        GameController.Instance.gameOverEvent.AddListener(GameOver);
+
         HomeScreenUI.SetActive(false);
         InGameUI.SetActive(true);
+        InGameTime = 0;
     }
+
+    private void GameOver()
+    {
+        GameController.Instance.SetStage(Stage.UI);
+    }
+
     public void GameQuit() 
     {
 #if UNITY_EDITOR
