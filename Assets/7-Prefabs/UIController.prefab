@@ -43,9 +43,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a548c744f935b7246975b7f0bfaa5914, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health1: {fileID: 0}
   GoldText: {fileID: 0}
-  PlayTimerText: {fileID: 0}
-  PauseTimerText: {fileID: 0}
+  TimerText: {fileID: 0}
   HomeScreenUI: {fileID: 0}
   InGameUI: {fileID: 0}
+  CutsceneUI: {fileID: 0}
   PauseScreenUI: {fileID: 0}
+  endGameUI: {fileID: 0}
+  endGameText: {fileID: 0}

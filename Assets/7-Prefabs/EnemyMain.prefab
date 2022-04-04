@@ -991,7 +991,7 @@ GameObject:
   - component: {fileID: 6225059391084593357}
   - component: {fileID: 339309602539580019}
   - component: {fileID: 3869523673429308755}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: EnemyMain
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -1083,7 +1083,7 @@ NavMeshAgent:
   m_Height: 2
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 2
+  m_ObstacleAvoidanceType: 3
 --- !u!114 &339309602539580019
 MonoBehaviour:
   m_ObjectHideFlags: 0

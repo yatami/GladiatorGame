@@ -43,8 +43,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64543440277f3964bae06491a7fda241, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyPrefab: {fileID: 5609221496669100895, guid: 4c3f121f2f58b5d448796fc8cb1ac40a, type: 3}
-  spawnRateMin: 0.7
-  spawnRateMax: 1.5
+  archerWaveNumber: 1
+  numberOfSwordEnemiesInWave: 02000000030000000300000001000000020000000200000003000000020000000000000002000000010000000500000002000000000000000500000002000000
+  numberOfArcherEnemiesInWave: 00000000000000000000000001000000010000000200000001000000020000000300000002000000010000000200000002000000040000000400000003000000
+  delayBetweenWaves: 4.5
+  spawnPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  EnemyArray:
+  - {fileID: 6899983918313157563, guid: c9ec5bdf385aebd4d93f490b5b1ee552, type: 3}
+  - {fileID: 7459191626771373685, guid: fcd1ebad841be8a479cd4d3364e8133c, type: 3}
+  spawnRateMin: 10
+  spawnRateMax: 15
   ArenaVerticalDis: 17.5
   ArenaHortizonalDis: 6
+  startGameEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  resetGameEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  pauseGameEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  resumeGameEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  gameOverEvent:
+    m_PersistentCalls:
+      m_Calls: []

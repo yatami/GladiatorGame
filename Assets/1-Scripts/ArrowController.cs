@@ -33,18 +33,26 @@ public class ArrowController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("collided with " + collision.gameObject.name);
 
         if (collision.gameObject.CompareTag("Wall"))
         {
             speed = 0;
             AudioController.Instance.PlayArrowHitSound();
+            gameObject.GetComponent<BoxCollider2D>().enabled = false;
         }
         if (collision.gameObject.CompareTag("Enemy"))
         {
+            AudioController.Instance.PlayFleshSound();
             //Buraya animasyon eklenir
             Destroy(this.gameObject);
-            collision.gameObject.GetComponent<Enemy>().ShotEnemy(collision.GetContact(0).point);
+            if(collision.gameObject.GetComponent<Enemy>() != null)
+            {
+                collision.gameObject.GetComponent<Enemy>().ShotEnemy(collision.GetContact(0).point);
+            }
+            else if(collision.gameObject.GetComponent<EnemyMovementArcher>() != null)
+            {
+                collision.gameObject.GetComponent<EnemyMovementArcher>().ShotEnemy(collision.GetContact(0).point);
+            }
         }
     }
 }

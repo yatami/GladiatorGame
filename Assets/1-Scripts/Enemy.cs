@@ -96,7 +96,7 @@ public class Enemy : MonoBehaviour
 
     public void FlyCharacterInTheDirection(Vector3 pos)
     {
-        Vector3 dir = (gameObject.transform.position - pos).normalized;
+        Vector3 dir = (gameObject.transform.position - Target.position).normalized;
 
         Vector3 targetPos = gameObject.transform.position + dir * 3;
 
@@ -137,7 +137,7 @@ public class Enemy : MonoBehaviour
         if (Death) return;
         if (Vector3.Distance(transform.position,Target.transform.position) < HittingDistance && !gameOver)
         {
-            Attack();
+            Invoke("Attack",0.3f);
         }
         
     }
