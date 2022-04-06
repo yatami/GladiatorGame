@@ -10,6 +10,8 @@ public class UIController : MonoBehaviour
     public GameObject health1;
     public TextMeshProUGUI GoldText;
     public TextMeshProUGUI TimerText;
+    public Text TimerTextCPixel;
+
     public GameObject HomeScreenUI;
     public GameObject InGameUI;
     public GameObject CutsceneUI;
@@ -27,6 +29,11 @@ public class UIController : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+        GameController.Instance.startGameEvent.AddListener(GameStart);
+    }
+
     public void GameStart()
     {
         GameController.Instance.SetStage(Stage.Play);
@@ -36,6 +43,7 @@ public class UIController : MonoBehaviour
         HomeScreenUI.SetActive(false);
         InGameUI.SetActive(true);
         InGameTime = 0;
+        UIGameTime = 0;
     }
 
     private void GameOver()
@@ -46,7 +54,7 @@ public class UIController : MonoBehaviour
 
     private void ActivateEndGameUI()
     {
-        endGameText.text = "You have delayed the inevitable for " + TimerText.text + " seconds.";
+        endGameText.text = "You have delayed the inevitable for " + InGameTime.ToString("0.00") + " seconds.";
         endGameUI.SetActive(true);
         HomeScreenUI.SetActive(false);
         InGameUI.SetActive(false);
@@ -66,16 +74,11 @@ public class UIController : MonoBehaviour
         GoldText.text = "$ " + Gold + "";
         if (GameController.Instance.GetStage() == Stage.Play)
         {
-            InGameTime = Mathf.Round((Time.time - UIGameTime) * 100);
-            if (InGameTime % 3f == 0)
-            {
-                TimerText.text = InGameTime / 100 + "";
-            }
+            InGameTime += Time.deltaTime;
+           // TimerText.text = InGameTime.ToString("0.00");
+            TimerTextCPixel.text = InGameTime.ToString("0.00");
         }
-        else
-        {
-            UIGameTime += Time.deltaTime;
-        }
+      
     }
 
     public void AddGold(int otherGold)

@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour
 
     List<GameObject> Enemys;
     private int waveNumber;
+    private float waveTimer;
 
 
     Stage stage;
@@ -49,11 +50,9 @@ public class GameController : MonoBehaviour
         stage = Stage.UI;
         Enemys = new List<GameObject>();
 
-
         startGameEvent.AddListener(AIStart);
         startGameEvent.AddListener(UIController.Instance.GameStart);
 
-        pauseGameEvent.AddListener(AIPause);
         pauseGameEvent.AddListener(UIGamePause);
 
         resumeGameEvent.AddListener(ResumeGame);
@@ -63,8 +62,6 @@ public class GameController : MonoBehaviour
 
     IEnumerator SpawnEnemyWave()
     {
-        while (true)
-        {
             if (stage == Stage.Play)
             {
 #if UNITY_EDITOR
@@ -95,8 +92,9 @@ public class GameController : MonoBehaviour
                     waveNumber = numberOfArcherEnemiesInWave.Length - 1;
                 }
             }
-            yield return new WaitForSeconds(delayBetweenWaves);
-        }
+
+        yield break;
+        
     }
 
     private void Update()
@@ -104,7 +102,17 @@ public class GameController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (pauseGameEvent != null)
+            {
                 pauseGameEvent.Invoke();
+            }
+           
+        }
+
+        waveTimer += Time.deltaTime;
+        if(waveTimer > delayBetweenWaves && stage == Stage.Play)
+        {
+            waveTimer = 0;
+            StartCoroutine(SpawnEnemyWave());
         }
     }
 
@@ -116,9 +124,22 @@ public class GameController : MonoBehaviour
     }
     private void UIGamePause()
     {
+        var Enemys = GameObject.FindGameObjectsWithTag("Enemy");
+        for (int i = 0; i < Enemys.Length; i++)
+        {
+            Enemys[i].GetComponent<Enemy>().EnemyAI(false);
+        }
         stage = Stage.UI;
         UIController.Instance.PauseScreenUI.SetActive(true);
         UIController.Instance.InGameUI.SetActive(true);
+
+        Invoke("StopTime", 0.1f);
+    }
+
+    private void StopTime()
+    {
+        //waveTimer = 0;
+        Time.timeScale = 0.0f;
     }
     public void SetStage(Stage stage)
     {
@@ -133,7 +154,7 @@ public class GameController : MonoBehaviour
     private void AIStart()
     {
         stage = Stage.Play;
-        StartCoroutine(SpawnEnemyWave());
+        //StartCoroutine(SpawnEnemyWave());
         Time.timeScale = 1f;
         var Enemys = GameObject.FindGameObjectsWithTag("Enemy");
         for (int i = 0; i < Enemys.Length; i++)
@@ -149,15 +170,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    private void AIPause()
-    {
-        Time.timeScale = 0.0f;
-        var Enemys = GameObject.FindGameObjectsWithTag("Enemy");
-        for (int i = 0; i < Enemys.Length; i++)
-        {
-            Enemys[i].GetComponent<Enemy>().EnemyAI(false);
-        }
-    }
+    
 
     public void StartGameButton()
     {
@@ -166,6 +179,8 @@ public class GameController : MonoBehaviour
             int cutScenePlayed = PlayerPrefs.GetInt("CutScenePlayed");
             if(cutScenePlayed == 0)
             {
+                PlayerPrefs.SetInt("CutScenePlayed", 1);
+                PlayerPrefs.Save();
                 UIController.Instance.ActivateCutscene();
             }
             else
@@ -176,8 +191,8 @@ public class GameController : MonoBehaviour
         }
             else
         {
-            /*PlayerPrefs.SetInt("CutScenePlayed", 1);
-            PlayerPrefs.Save();*/
+            PlayerPrefs.SetInt("CutScenePlayed", 1);
+            PlayerPrefs.Save();
                 UIController.Instance.ActivateCutscene();
         }
 

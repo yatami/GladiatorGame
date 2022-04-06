@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,6 +20,17 @@ public class AudioController : MonoBehaviour
     void Start()
     {
         GameController.Instance.startGameEvent.AddListener(gameStarted);
+        GameController.Instance.gameOverEvent.AddListener(gameOver);
+    }
+
+    private void gameOver()
+    {
+        DOTween.To(() => audioSources[2].pitch, x => audioSources[2].pitch = x, 0.5f, 4).OnComplete(StopMusic);
+    }
+
+    private void StopMusic()
+    {
+        //audioSources[2].Stop();
     }
 
     private void gameStarted()

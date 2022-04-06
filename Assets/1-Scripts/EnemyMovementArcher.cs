@@ -62,7 +62,10 @@ public class EnemyMovementArcher : MonoBehaviour
         }
         else
         {
-            navMeshAgent.isStopped = true;
+            if (!Death)
+            {
+                navMeshAgent.isStopped = true;
+            }
         }
         if (!Death)
         {
@@ -108,6 +111,8 @@ public class EnemyMovementArcher : MonoBehaviour
         Vector3 dir = (gameObject.transform.position - Target.position).normalized;
 
         Vector3 targetPos = gameObject.transform.position + dir * 3;
+
+        targetPos = new Vector3(targetPos.x, targetPos.y, gameObject.transform.position.z);
 
         gameObject.transform.DOMove(targetPos, 0.5f).SetEase(Ease.OutCubic);
     }

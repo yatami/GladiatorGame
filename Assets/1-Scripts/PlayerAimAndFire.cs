@@ -112,8 +112,7 @@ public class PlayerAimAndFire : MonoBehaviour
 
     private void cameraShake()
     {
-        DOTween.To(() => cinemachineRef.m_Lens.OrthographicSize, x => cinemachineRef.m_Lens.OrthographicSize = x, orthographicStartSize, camShakeDuration/3).OnComplete((
-                () =>
+        DOTween.To(() => cinemachineRef.m_Lens.OrthographicSize, x => cinemachineRef.m_Lens.OrthographicSize = x, orthographicStartSize, camShakeDuration/3).OnComplete((() =>
                 {
                     DOTween.To(() => cinemachineRef.m_Lens.OrthographicSize, x => cinemachineRef.m_Lens.OrthographicSize = x, orthographicEndSize, camShakeDuration*2/3);
                 }));
